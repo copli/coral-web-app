@@ -1,3 +1,13 @@
+Docs/
+
+# Build output
+dist/
+build/
+
+# IDE configuration files
+.idea/
+.vscode/
+
 # Logs
 logs
 *.log
@@ -18,6 +28,10 @@ firebase-debug.*.log*
 # .firebaserc
 
 # Runtime data
+# OS-generated files
+.DS_Store
+Thumbs.db
+
 pids
 *.pid
 *.seed
