@@ -1,6 +1,0 @@
-Minha sugestão principal para você agora é focar no passo 1.
-Para continuar, você poderia perguntar:
-Você pode me dar um exemplo de regras de segurança do Firestore mais robustas para o meu aplicativo?
-Como eu configuro meu aplicativo para usar os emuladores do Firebase?
-Quais são as considerações de custo ao implantar meu aplicativo no Firebase Hosting?
-
