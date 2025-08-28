@@ -1,0 +1,26 @@
+{
+  "name": "coral-web-app",
+  "version": "1.0.0",
+  "description": "Aplicativo web para o Coral de Homens Guerreiros de Cristo, construído com Firebase.",
+  "main": "index.html",
+  "scripts": {
+    "deploy": "firebase deploy --only hosting",
+    "serve": "firebase emulators:start --only hosting",
+    "setup": "firebase init"
+  },
+  "keywords": [
+    "firebase",
+    "web",
+    "html",
+    "javascript",
+    "coral-guerreiros"
+  ],
+  "author": "Seu Nome ou Nome da Organização",
+  "license": "ISC",
+  "devDependencies": {
+    "firebase-tools": "^13.11.2"
+  },
+  "dependencies": {
+    "@dataconnect/generated": "file:dataconnect-generated/js/example-connector"
+  }
+}

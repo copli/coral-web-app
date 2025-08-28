@@ -1,0 +1,13 @@
+Como verifico se a licença do Gemini Code Assist está atribuída ao meu usuário.
+O Gemini disse
+Ótima pergunta! É fundamental verificar se sua licença do Gemini Code Assist está corretamente atribuída ao seu usuário para que você possa aproveitar todos os recursos do Gemini no Firebase.
+Para verificar se a licença do Gemini Code Assist está atribuída ao seu usuário, siga estes passos principais:
+Acesse o Console do Firebase: Vá até o Console do Firebase para o seu projeto Coral-Guerreiros .
+Navegue para Configurações de Assinatura: No menu lateral esquerdo, clique no ícone de engrenagem (Configurações do projeto), e então selecione "Uso e faturamento" (Usage and Billing). Dentro dessa seção, procure pela aba "Assinaturas" (Subscriptions).
+Gerencie suas Licenças: Na seção de assinaturas, você deverá ver sua assinatura do Gemini Code Assist. Clique no link para "Gerenciar licenças" (Manage licenses) associado a ela. Isso geralmente irá redirecioná-lo para a interface de gerenciamento de licenças do Google Cloud Console, onde a atribuição é controlada.
+Verifique a Atribuição: Uma vez na página de gerenciamento de licenças, você verá uma lista de usuários e se eles têm uma licença atribuída. Procure seu nome de usuário ou e-mail na lista para confirmar se a licença está ativa para você.
+É importante lembrar que as licenças do Gemini Code Assist são atribuídas individualmente por usuário. Se você não vir sua licença ou tiver problemas, pode ser necessário que um administrador da sua conta Google Workspace ou do projeto Firebase faça a atribuição.
+Para aprofundar um pouco mais, você pode perguntar:
+Como um administrador atribui uma licença do Gemini Code Assist a um usuário específico?
+Onde posso encontrar mais detalhes sobre os diferentes tipos de licenciamento do Gemini Code Assist (Standard vs. Enterprise)?
+Quais são os papéis de IAM necessários para gerenciar e usar o Gemini no Firebase?

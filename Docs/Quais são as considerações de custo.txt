@@ -1,0 +1,15 @@
+Quais são as considerações de custo ao implantar meu aplicativo no Firebase Hosting?
+O Gemini disse
+Olá! Que ótimo que você está pensando nos custos para seu aplicativo web TypeScript/JavaScript no Firebase.
+Ao implantar seu aplicativo, especialmente um aplicativo dinâmico como o que o Firebase App Hosting suporta, há considerações importantes sobre os custos, mesmo com seu projeto Coral-Guerreiros no plano Blaze.
+Primeiro, é importante saber que o Firebase App Hosting opera sob o plano de preços Blaze (pague conforme o uso). Há limites de "no-cost" para produtos do Google Cloud invocados pelo App Hosting, e você só será cobrado pelo uso que exceder esses limites. Esses limites "no-cost" são agregados por conta de faturamento e são redefinidos mensalmente.
+Os principais itens de custo para o Firebase App Hosting são:
+Largura de Banda de Saída Não Armazenada em Cache (Uncached Outgoing Bandwidth): Refere-se aos dados transferidos dos servidores de origem para preencher os caches do Cloud CDN e, em seguida, para o usuário final. Isso acontece quando o conteúdo solicitado ainda não está no cache.
+Largura de Banda de Saída Armazenada em Cache (Cached Outgoing Bandwidth): Refere-se aos dados transferidos dos caches do Cloud CDN diretamente para o dispositivo do usuário final.
+Produtos Subjacentes do Google Cloud: Seu aplicativo também incorrerá em custos pelo uso de serviços como Cloud Run, Cloud Build, Artifact Registry, Secret Manager e Cloud Logging, que são usados pelo seu backend.
+O custo real pode variar muito. Fatores como o tráfego do seu aplicativo, as configurações de tempo de execução e o tamanho das respostas são cruciais. Por exemplo, páginas com muitas imagens ou dados complexos e conteúdo gerado dinamicamente tendem a ser mais caras do que arquivos HTML simples ou versões em cache. Métrica como o número de requisições por visita, o tamanho médio da resposta e a latência média da resposta impactam diretamente os custos.
+Em resumo, enquanto seu projeto está no plano Blaze, o uso inteligente de caching e a otimização do tamanho das respostas podem ajudar a gerenciar os custos de largura de banda, e você deve estar ciente do consumo dos serviços de back-end.
+Para explorar isso em mais detalhes, você poderia perguntar:
+Como posso otimizar meu aplicativo para reduzir a largura de banda de saída não armazenada em cache?
+Quais são as melhores práticas para gerenciar os custos dos serviços do Google Cloud, como Cloud Run e Cloud Logging, usados pelo Firebase App Hosting?
+Onde posso encontrar detalhes específicos sobre os limites de uso "no-cost" para o Firebase App Hosting?

@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      let adminUids = ['T9CRmqHdVHXDkrJD27Jnt2Dkt1K2'];
+      return request.auth != null && request.auth.uid in adminUids;
+    }
+
+    match /{document=**} {
+      allow read, write: false;
+    }
+
+    match /appInfo/acessos {
+      allow read: true;
+      allow update: if request.auth != null &&
+                       request.resource.data.keys().hasOnly(['count']) &&
+                       request.resource.data.count is number;
+      allow create, delete: false;
+    }
+
+    match /musicas/{musicId} {
+      allow read: true;
+      allow write: if isAdmin();
+    }
+
+    match /carouselImages/{imageId} {
+      allow read: true;
+      allow write: if isAdmin();
+    }
+
+    match /articles/{articleId} {
+      allow read: true;
+      allow write: if isAdmin();
+    }
+
+    match /announcements/{announcementId} {
+      allow read: true;
+      allow write: if isAdmin();
+    }
+  }
+}

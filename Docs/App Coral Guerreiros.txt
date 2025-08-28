@@ -1,0 +1,24 @@
+Quero criar um app otimizado para celular. 
+Na tela inicial do app deve aparecer o título CORAL DE HOMENS GUERREIROS DE CRISTO e um carrossel com fotos do grupo. 
+
+Na tela inicial deverá aparecer um contador de acessos.
+
+O app deverá ter uma área administrativa e outra área para usuários.
+Criar uma área de login para administradores (para adicionar músicas, fotos, artigos, avisos).
+
+O administrador deverá ter a funcionalidade de inserir letras de música em texto, de forma que as músicas apareçam para os usuários organizadas por título em um índice. 
+No momento da inserção da letra da música deverá mostrar além do campo para a letra, mais 2 campos para inserir links para vídeos relacionados à música. 
+Adicione também um campo para o nome do autor/compositor.
+Permitir somente ao admin a edição e exclusão de músicas já cadastradas.
+O administrador deverá ter a funcionalidade de inserir artigos em texto e imagens que aparecerão para os usuários na área de links.
+Permitir que os administradores do app possam adicionar/remover fotos do carrossel.
+
+Quando o usuário clicar em algum item do índice de música, deverá mostrar a letra da música, nome do autor/compositor e os links sugeridos. 
+ 
+O índice de músicas deve aparecer em um menu suspenso. Adicionar campo de busca com autocomplete no menu suspenso. Adicionar botão para o usuário compartilhar música nas redes sociais.
+
+Abaixo do menu de músicas deve aparecer uma área de links para artigos. Adicionar categorias ou tags nos artigos para facilitar a navegação. Permitir abertura dos artigos dentro do app, sem redirecionar para navegador externo.
+
+Abaixo da área de links para artigos deve aparecer uma área para publicar avisos do administrador.
+
+Verifique se esses requisitos são coerentes e sugira melhorias e adequações.

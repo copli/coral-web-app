@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Coral de Homens Guerreiros de Cristo</title>
+    <!-- Opcional: Você pode adicionar estilos CSS aqui ou em um arquivo .css separado -->
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #admin-content { background-color: #e6ffe6; padding: 15px; border-radius: 5px; margin-top: 20px;}
+        #login-area { background-color: #fff0e6; padding: 15px; border-radius: 5px; margin-top: 20px;}
+        form div { margin-bottom: 10px; }
+        label { display: inline-block; width: 120px; vertical-align: top;} /* Ajustado para melhor alinhamento */
+        input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea {
+            padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: calc(100% - 130px); /* Ajustado para ocupar mais espaço */
+            box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura */
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        #admin-logout-button { background-color: #f44336; }
+        #admin-logout-button:hover { background-color: #da190b; }
+        #login-message, #add-music-message, #upload-photo-message { margin-top: 10px; } /* Adicionado #upload-photo-message */
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; } /* Estilo para a linha divisória */
+
+        /* Estilos para o novo dropdown de músicas */
+        #music-dropdown-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 400px; /* Limita a largura do dropdown */
+            margin-bottom: 20px;
+        }
+        #music-dropdown-trigger {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 4px;
+        }
+        #music-dropdown-trigger::after {
+            content: '▼'; /* Símbolo de seta para baixo */
+            margin-left: 10px;
+        }
+        #music-dropdown-content {
+            display: none; /* Oculto por padrão */
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 100%;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1; /* Garante que fique acima de outros elementos */
+            border: 1px solid #ddd;
+            border-top: none;
+            max-height: 300px; /* Altura máxima para a lista rolável */
+            overflow-y: auto;
+            border-radius: 0 0 4px 4px;
+        }
+        #music-dropdown-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #music-dropdown-content ul li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        #music-dropdown-content ul li:last-child {
+            border-bottom: none;
+        }
+        #music-dropdown-content ul li:hover {
+            background-color: #e2e2e2;
+        }
+
+        /* Estilos para a área de detalhes da música selecionada */
+        #selected-music-details {
+            border: 1px solid #b3d9ff; /* Cor para indicar que é uma seção de detalhes */
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #e6f7ff;
+            border-radius: 8px;
+        }
+        #selected-music-details h3 {
+            color: #004085;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        #selected-music-details p {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        #selected-music-details pre {
+            background-color: #d1ecf1;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        #selected-music-details ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 5px;
+        }
+        #selected-music-details ul li {
+            margin-bottom: 3px;
+        }
+        #selected-music-details ul li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        #selected-music-details ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilos para o Carrossel Básico */
+        #carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Largura máxima do carrossel */
+            margin: 20px auto; /* Centraliza */
+            overflow: hidden; /* Oculta o que está fora da área de visualização */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #carousel-inner {
+            display: flex; /* Coloca as imagens lado a lado */
+            transition: transform 0.5s ease-in-out; /* Transição suave para o slide */
+        }
+        #carousel-inner img {
+            width: 100%; /* Cada imagem ocupa 100% da largura do #carousel-inner no momento */
+            height: 350px; /* Altura fixa para as imagens do carrossel */
+            object-fit: cover; /* Recorta a imagem para cobrir o espaço sem distorcer */
+            flex-shrink: 0; /* Impede que as imagens encolham */
+        }
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 1.5em;
+            z-index: 10;
+            border-radius: 4px;
+        }
+        #carousel-prev {
+            left: 10px;
+        }
+        #carousel-next {
+            right: 10px;
+        }
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <h1>CORAL DE HOMENS GUERREIROS DE CRISTO</h1>
+
+    <!-- Novo HTML para o Carrossel -->
+    <div id="carousel-container">
+        <div id="carousel-inner">
+            <!-- As fotos do carrossel serão carregadas aqui pelo JavaScript -->
+            <p style="padding: 20px; text-align: center; width: 100%;">Carregando fotos do carrossel...</p>
+        </div>
+        <button id="carousel-prev" class="carousel-button" style="display: none;">&#10094;</button> <!-- Seta esquerda -->
+        <button id="carousel-next" class="carousel-button" style="display: none;">&#10095;</button> <!-- Seta direita -->
+    </div>
+
+
+    <div id="access-counter">
+        Contador de Acessos: <span id="counter-display">0</span>
+    </div>
+
+    <nav id="main-menu">
+        <ul>
+            <li><a href="#musicas">Músicas</a></li>
+            <li><a href="#artigos">Artigos</a></li>
+            <li><a href="#avisos">Avisos</a></li>
+            <li><a href="#admin">Área Admin</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="musicas">
+            <h2>Índice de Músicas</h2>
+            
+            <!-- Novo HTML para o Dropdown de Músicas -->
+            <div id="music-dropdown-container">
+                <div id="music-dropdown-trigger">Selecione uma Música</div>
+                <div id="music-dropdown-content">
+                    <ul id="music-list-ul">
+                        <!-- Músicas serão carregadas aqui pelo JavaScript -->
+                        <li>Carregando músicas...</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Área para exibir os detalhes da música selecionada -->
+            <div id="selected-music-details">
+                <p>Nenhuma música selecionada. Por favor, selecione uma música no menu acima.</p>
+            </div>
+        </section>
+
+        <section id="artigos">
+            <h2>Artigos e Links</h2>
+            <!-- Conteúdo de artigos aqui -->
+        </section>
+
+        <section id="avisos">
+            <h2>Avisos do Administrador</h2>
+            <!-- Conteúdo de avisos aqui -->
+        </section>
+
+        <section id="admin">
+            <h2>Área Administrativa</h2>
+            <!-- HTML para o formulário de login e área de admin -->
+            <div id="login-area">
+                <h3>Login do Administrador</h3>
+                <form id="admin-login-form">
+                    <div>
+                        <label for="admin-email">Email:</label>
+                        <input type="email" id="admin-email" required>
+                    </div>
+                    <div>
+                        <label for="admin-password">Senha:</label>
+                        <input type="password" id="admin-password" required>
+                    </div>
+                    <button type="submit">Entrar</button>
+                    <p id="login-message" style="color: red;"></p>
+                </form>
+            </div>
+
+            <div id="admin-content" style="display: none;">
+                <h3>Bem-vindo, Administrador!</h3>
+                <p>Aqui você poderá gerenciar músicas, fotos, artigos e avisos.</p>
+                <button id="admin-logout-button">Sair</button>
+
+                <hr style="margin: 20px 0;"> <!-- Linha divisória para organizar -->
+
+                <h4>Adicionar Nova Música</h4>
+                <form id="add-music-form">
+                    <div>
+                        <label for="music-title">Título:</label>
+                        <input type="text" id="music-title" required>
+                    </div>
+                    <div>
+                        <label for="music-author">Autor/Compositor:</label>
+                        <input type="text" id="music-author">
+                    </div>
+                    <div>
+                        <label for="music-lyrics">Letra da Música:</label>
+                        <textarea id="music-lyrics" rows="10" required></textarea>
+                    </div>
+                    <div>
+                        <label for="video-link1">Link de Vídeo 1:</label>
+                        <input type="url" id="video-link1">
+                    </div>
+                    <div>
+                        <label for="video-link2">Link de Vídeo 2:</label>
+                        <input type="url" id="video-link2">
+                    </div>
+                    <button type="submit">Adicionar Música</button>
+                    <p id="add-music-message" style="color: green;"></p>
+                </form>
+
+                <hr style="margin: 20px 0;"> <!-- Outra linha divisória para organizar -->
+
+                <h4>Gerenciar Fotos do Carrossel</h4>
+                <div id="upload-photo-area">
+                    <input type="file" id="carousel-photo-input" accept="image/*">
+                    <button id="upload-carousel-photo-button" disabled>Carregar Foto</button>
+                    <p id="upload-photo-message" style="color: grey; margin-top: 10px;"></p>
+                    <div id="photo-preview-container" style="margin-top: 10px; display: none;">
+                        <img id="photo-preview" src="" alt="Pré-visualização da Imagem" style="max-width: 200px; max-height: 200px; display: none;">
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 30px;">Fotos Atuais do Carrossel</h4>
+                <div id="current-carousel-photos">
+                    <p>Carregando fotos...</p>
+                    <!-- Fotos do carrossel serão listadas aqui -->
+                </div>
+
+                <!-- FUTURAS FERRAMENTAS DE ADMIN AQUI (gerenciar artigos, avisos) -->
+            </div>
+        </section>
+    </main>
+
+
+    <!-- IMPORTANTE: A TAG SCRIPT DEVE TER type="module" -->
+    <script type="module">
+        // Importe as funções necessárias para os serviços do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        // Importações para Firestore: getFirestore, doc, getDoc, updateDoc, setDoc, increment, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc as firestoreDoc
+        import { getFirestore, doc, getDoc, updateDoc, setDoc, increment, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc as firestoreDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+        // Importações para Auth: getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+        // Importações para Storage: getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js"; // Opcional se for usar Analytics
+
+        // Sua configuração do app web do Firebase
+        const firebaseConfig = {
+          apiKey: "AIzaSyAywv9Aj6TXKFwCxbYpOnEY3Ymtf4o77ic",
+          authDomain: "coral-guerreiros.firebaseapp.com",
+          projectId: "coral-guerreiros",
+          storageBucket: "coral-guerreiros.firebasestorage.app",
+          messagingSenderId: "117520114132",
+          appId: "1:117520114132:web:71e40037c8261789ffb641",
+          measurementId: "G-2GH6LGCJ80" // Este é para Analytics. Mantenha se for usar, ou remova.
+        };
+
+        // Inicialize o Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Obtenha uma referência para cada serviço que você vai usar
+        const db = getFirestore(app);        // Para Cloud Firestore
+        const auth = getAuth(app);          // Para Firebase Authentication
+        const storage = getStorage(app);    // Para Firebase Storage
+        // const analytics = getAnalytics(app); // Para Google Analytics (descomente se for usar)
+
+        console.log("Firebase conectado, Firestore, Auth e Storage prontos!");
+
+        // === Lógica do Contador de Acessos ===
+        const counterRef = doc(db, "appInfo", "acessos"); // Referência ao documento 'acessos' na coleção 'appInfo'
+        const counterDisplayElement = document.getElementById("counter-display"); // O elemento <span> no seu HTML
+
+        if (counterDisplayElement) { // Garante que o elemento existe no HTML
+            getDoc(counterRef)
+                .then((docSnap) => {
+                    let currentCount = 0;
+                    if (docSnap.exists()) {
+                        // Se o documento existe, pegue o valor atual e incremente
+                        currentCount = docSnap.data().count || 0;
+                        updateDoc(counterRef, {
+                            count: increment(1) // Incrementa atomicamente o contador
+                        });
+                    } else {
+                        // Se o documento não existe (primeira vez), crie-o com 1
+                        setDoc(counterRef, {
+                            count: 1
+                        });
+                        currentCount = 0; // O contador inicial será 1 após esta visita (o display mostra currentCount + 1)
+                    }
+
+                    // Atualiza o display imediatamente para a visita atual + 1
+                    counterDisplayElement.textContent = currentCount + 1;
+
+                })
+                .catch((error) => {
+                    console.error("Erro ao gerenciar contador de acessos:", error);
+                });
+        } else {
+            console.warn("Elemento HTML 'counter-display' não encontrado. O contador de acessos não será exibido.");
+        }
+        // === Fim da Lógica do Contador de Acessos ===
+
+        // === Lógica do Carrossel na Página Inicial ===
+        const carouselContainer = document.getElementById("carousel-container");
+        const carouselInner = document.getElementById("carousel-inner");
+        const carouselPrevBtn = document.getElementById("carousel-prev");
+        const carouselNextBtn = document.getElementById("carousel-next");
+
+        let carouselImages = []; // Armazena as URLs das imagens para o carrossel
+        let currentImageIndex = 0;
+
+        function displayCarouselImage() {
+            if (carouselImages.length === 0) {
+                carouselInner.innerHTML = '<p style="padding: 20px; text-align: center; width: 100%;">Nenhuma foto disponível para o carrossel.</p>';
+                carouselPrevBtn.style.display = 'none';
+                carouselNextBtn.style.display = 'none';
+                return;
+            }
+
+            // Garante que o índice esteja dentro dos limites
+            currentImageIndex = (currentImageIndex + carouselImages.length) % carouselImages.length;
+
+            carouselInner.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+
+            // Mostra/esconde botões se houver apenas uma imagem
+            if (carouselImages.length <= 1) {
+                carouselPrevBtn.style.display = 'none';
+                carouselNextBtn.style.display = 'none';
+            } else {
+                carouselPrevBtn.style.display = 'block';
+                carouselNextBtn.style.display = 'block';
+            }
+        }
+
+        if (carouselContainer && carouselInner && carouselPrevBtn && carouselNextBtn) {
+            // Consulta a coleção de imagens do carrossel, ordenada pelo timestamp (as mais antigas primeiro)
+            const qCarousel = query(collection(db, "carouselImages"), orderBy("timestamp", "asc"));
+
+            onSnapshot(qCarousel, (querySnapshot) => {
+                carouselInner.innerHTML = ""; // Limpa o conteúdo atual
+                carouselImages = []; // Limpa o array de imagens
+
+                if (querySnapshot.empty) {
+                    displayCarouselImage(); // Atualiza para mostrar "nenhuma foto"
+                    return;
+                }
+
+                querySnapshot.forEach((docSnap) => {
+                    const photo = docSnap.data();
+                    carouselImages.push(photo.url); // Adiciona a URL ao array
+
+                    const imgElement = document.createElement("img");
+                    imgElement.src = photo.url;
+                    imgElement.alt = "Foto do Carrossel";
+                    carouselInner.appendChild(imgElement);
+                });
+
+                displayCarouselImage(); // Exibe a primeira imagem (ou a atual se o índice for válido)
+            }, (error) => {
+                console.error("Erro ao carregar fotos do carrossel:", error);
+                carouselInner.innerHTML = `<p style="color: red; padding: 20px; text-align: center; width: 100%;">Erro ao carregar fotos do carrossel: ${error.message}</p>`;
+                carouselPrevBtn.style.display = 'none';
+                carouselNextBtn.style.display = 'none';
+            });
+
+            // Event Listeners para os botões de navegação
+            carouselPrevBtn.addEventListener("click", () => {
+                currentImageIndex--;
+                displayCarouselImage();
+            });
+
+            carouselNextBtn.addEventListener("click", () => {
+                currentImageIndex++;
+                displayCarouselImage();
+            });
+        } else {
+            console.warn("Elementos HTML do carrossel não encontrados. O carrossel não será interativo.");
+        }
+        // === Fim da Lógica do Carrossel na Página Inicial ===
+
+
+        // === Lógica de Login do Administrador ===
+        const adminLoginForm = document.getElementById("admin-login-form");
+        const adminEmailInput = document.getElementById("admin-email");
+        const adminPasswordInput = document.getElementById("admin-password");
+        const loginMessage = document.getElementById("login-message");
+        const loginArea = document.getElementById("login-area");
+        const adminContent = document.getElementById("admin-content");
+        const adminLogoutButton = document.getElementById("admin-logout-button");
+
+        // Função para verificar o estado da autenticação (se o usuário já está logado)
+        onAuthStateChanged(auth, (user) => { // 'auth' é a instância do Firebase Auth
+            if (user) {
+                // Usuário está logado
+                loginArea.style.display = "none";
+                adminContent.style.display = "block";
+                console.log("Usuário logado:", user.email);
+            } else {
+                // Usuário não está logado
+                loginArea.style.display = "block";
+                adminContent.style.display = "none";
+                console.log("Nenhum usuário logado.");
+            }
+        });
+
+        // Lidar com o envio do formulário de login
+        if (adminLoginForm) {
+            adminLoginForm.addEventListener("submit", async (e) => { // 'async' para usar await
+                e.preventDefault(); // Impede o recarregamento da página
+
+                const email = adminEmailInput.value;
+                const password = adminPasswordInput.value;
+
+                try {
+                    await signInWithEmailAndPassword(auth, email, password); // 'auth' é a instância do Firebase Auth
+                    // Login bem-sucedido
+                    loginMessage.textContent = "Login realizado com sucesso!";
+                    loginMessage.style.color = "green";
+                    adminEmailInput.value = ""; // Limpa os campos
+                    adminPasswordInput.value = "";
+                    // onAuthStateChanged já cuidará de mostrar o adminContent
+                } catch (error) {
+                    // Ocorreu um erro
+                    let errorMessage = "";
+                    switch (error.code) {
+                        case "auth/invalid-email":
+                            errorMessage = "Email inválido.";
+                            break;
+                        case "auth/user-not-found":
+                            errorMessage = "Usuário não encontrado.";
+                            break;
+                        case "auth/wrong-password":
+                            errorMessage = "Senha incorreta.";
+                            break;
+                        case "auth/invalid-credential": // Erro comum para email/senha inválidos em versões mais novas
+                            errorMessage = "Email ou senha inválidos.";
+                            break;
+                        case "auth/too-many-requests":
+                            errorMessage = "Muitas tentativas de login. Tente novamente mais tarde.";
+                            break;
+                        default:
+                            errorMessage = "Erro de login: " + error.message;
+                            break;
+                    }
+                    loginMessage.textContent = errorMessage;
+                    loginMessage.style.color = "red";
+                    console.error("Erro de login:", error);
+                }
+            });
+        }
+
+        // Lidar com o botão de Sair
+        if (adminLogoutButton) {
+            adminLogoutButton.addEventListener("click", async () => { // 'async' para usar await
+                try {
+                    await signOut(auth); // 'auth' é a instância do Firebase Auth
+                    console.log("Usuário deslogado.");
+                    // onAuthStateChanged já cuidará de mostrar o loginArea
+                    loginMessage.textContent = "Você foi desconectado.";
+                    loginMessage.style.color = "green";
+                } catch (error) {
+                    console.error("Erro ao fazer logout:", error);
+                    loginMessage.textContent = "Erro ao fazer logout: " + error.message;
+                    loginMessage.style.color = "red";
+                }
+            });
+        }
+        // === Fim da Lógica de Login do Administrador ===
+
+        // === Lógica para Adicionar Nova Música ===
+        const addMusicForm = document.getElementById("add-music-form");
+        const musicTitleInput = document.getElementById("music-title");
+        const musicAuthorInput = document.getElementById("music-author");
+        const musicLyricsTextarea = document.getElementById("music-lyrics");
+        const videoLink1Input = document.getElementById("video-link1");
+        const videoLink2Input = document.getElementById("video-link2");
+        const addMusicMessage = document.getElementById("add-music-message");
+
+        if (addMusicForm) {
+            addMusicForm.addEventListener("submit", async (e) => {
+                e.preventDefault(); // Impede o recarregamento da página
+
+                const title = musicTitleInput.value.trim(); // Trim para remover espaços em branco extras
+                const author = musicAuthorInput.value.trim() || "Desconhecido"; // Default se vazio
+                const lyrics = musicLyricsTextarea.value.trim();
+                const videoLink1 = videoLink1Input.value.trim();
+                const videoLink2 = videoLink2Input.value.trim();
+
+                // Cria um array de links de vídeo, incluindo apenas os que não estão vazios
+                const videoLinks = [];
+                if (videoLink1) videoLinks.push(videoLink1);
+                if (videoLink2) videoLinks.push(videoLink2);
+
+                if (!title || !lyrics) {
+                    addMusicMessage.textContent = "Título e Letra são campos obrigatórios.";
+                    addMusicMessage.style.color = "red";
+                    return;
+                }
+
+                try {
+                    // Adiciona um novo documento à coleção 'musicas' no Firestore
+                    await addDoc(collection(db, "musicas"), {
+                        titulo: title,
+                        autor: author,
+                        letra: lyrics,
+                        linksVideos: videoLinks,
+                        timestamp: new Date().toISOString() // Adiciona um timestamp ISO para ordenação e compatibilidade
+                    });
+
+                    addMusicMessage.textContent = "Música adicionada com sucesso!";
+                    addMusicMessage.style.color = "green";
+                    // Limpa o formulário após o sucesso
+                    addMusicForm.reset();
+                    musicTitleInput.focus(); // Coloca o foco no primeiro campo
+                } catch (error) {
+                    console.error("Erro ao adicionar música:", error);
+                    addMusicMessage.textContent = "Erro ao adicionar música: " + error.message;
+                    addMusicMessage.style.color = "red";
+                }
+            });
+        }
+        // === Fim da Lógica para Adicionar Nova Música ===
+
+        // === Lógica para Gerenciar Fotos do Carrossel (Admin - Upload e Exclusão) ===
+        const carouselPhotoInput = document.getElementById("carousel-photo-input");
+        const uploadCarouselPhotoButton = document.getElementById("upload-carousel-photo-button");
+        const uploadPhotoMessage = document.getElementById("upload-photo-message");
+        const photoPreviewContainer = document.getElementById("photo-preview-container");
+        const photoPreview = document.getElementById("photo-preview");
+        const currentCarouselPhotosDiv = document.getElementById("current-carousel-photos");
+
+        let selectedFile = null; // Variável para armazenar o arquivo selecionado
+
+        // 2.1. Pré-visualização da Imagem Selecionada
+        if (carouselPhotoInput) {
+            carouselPhotoInput.addEventListener("change", (e) => {
+                selectedFile = e.target.files[0];
+                if (selectedFile) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        photoPreview.src = event.target.result;
+                        photoPreviewContainer.style.display = "block";
+                        photoPreview.style.display = "block";
+                    };
+                    reader.readAsDataURL(selectedFile);
+                    uploadCarouselPhotoButton.disabled = false; // Habilita o botão de upload
+                    uploadPhotoMessage.textContent = `Arquivo selecionado: ${selectedFile.name}`;
+                    uploadPhotoMessage.style.color = "grey";
+                } else {
+                    photoPreviewContainer.style.display = "none";
+                    photoPreview.style.display = "none";
+                    uploadCarouselPhotoButton.disabled = true;
+                    uploadPhotoMessage.textContent = "Nenhum arquivo selecionado.";
+                }
+            });
+        }
+
+        // 2.2. Lógica de Upload da Foto
+        if (uploadCarouselPhotoButton) {
+            uploadCarouselPhotoButton.addEventListener("click", async () => {
+                if (!selectedFile) {
+                    uploadPhotoMessage.textContent = "Por favor, selecione uma imagem para carregar.";
+                    uploadPhotoMessage.style.color = "red";
+                    return;
+                }
+
+                // Gerar um nome de arquivo único para o Storage
+                const fileName = `${Date.now()}_${selectedFile.name}`;
+                const storageRef = ref(storage, `carousel_images/${fileName}`); // Caminho no Cloud Storage
+
+                const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        // Monitora o progresso do upload
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        uploadPhotoMessage.textContent = `Carregando: ${progress.toFixed(2)}%`;
+                        uploadPhotoMessage.style.color = "blue";
+                    },
+                    (error) => {
+                        // Lida com erros de upload
+                        console.error("Erro no upload:", error);
+                        uploadPhotoMessage.textContent = `Erro no upload: ${error.message}`;
+                        uploadPhotoMessage.style.color = "red";
+                    },
+                    async () => {
+                        // Upload concluído com sucesso
+                        uploadPhotoMessage.textContent = "Upload concluído! Obtendo URL...";
+                        try {
+                            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                            uploadPhotoMessage.textContent = "Foto carregada com sucesso!";
+                            uploadPhotoMessage.style.color = "green";
+
+                            // Salvar a URL da imagem no Firestore para o carrossel
+                            await addDoc(collection(db, "carouselImages"), {
+                                url: downloadURL,
+                                path: uploadTask.snapshot.ref.fullPath, // Salva o caminho completo no Storage
+                                timestamp: new Date().toISOString()
+                            });
+
+                            uploadPhotoMessage.textContent = "Foto adicionada ao carrossel!";
+                            uploadPhotoMessage.style.color = "green";
+                            // Limpa a seleção e o preview após o upload
+                            carouselPhotoInput.value = "";
+                            selectedFile = null;
+                            photoPreviewContainer.style.display = "none";
+                            photoPreview.style.display = "none";
+                            uploadCarouselPhotoButton.disabled = true;
+
+                        } catch (error) {
+                            console.error("Erro ao obter URL ou salvar no Firestore:", error);
+                            uploadPhotoMessage.textContent = `Erro ao finalizar: ${error.message}`;
+                            uploadPhotoMessage.style.color = "red";
+                        }
+                    }
+                );
+            });
+        }
+
+        // 2.3. Exibir Fotos Atuais do Carrossel (Admin) e Lógica de Exclusão
+        if (currentCarouselPhotosDiv) {
+            const q = query(collection(db, "carouselImages"), orderBy("timestamp", "desc")); // Ordena as mais recentes primeiro
+
+            onSnapshot(q, (querySnapshot) => {
+                currentCarouselPhotosDiv.innerHTML = ""; // Limpa a lista antes de adicionar
+                if (querySnapshot.empty) {
+                    currentCarouselPhotosDiv.innerHTML = "<p>Nenhuma foto no carrossel. Comece a adicionar!</p>";
+                    return;
+                }
+
+                querySnapshot.forEach((docSnap) => {
+                    const photoData = docSnap.data();
+                    const photoId = docSnap.id;
+
+                    const photoItemDiv = document.createElement("div");
+                    photoItemDiv.style.display = "flex";
+                    photoItemDiv.style.alignItems = "center";
+                    photoItemDiv.style.marginBottom = "10px";
+                    photoItemDiv.style.border = "1px solid #eee";
+                    photoItemDiv.style.padding = "5px";
+                    photoItemDiv.style.borderRadius = "5px";
+
+                    photoItemDiv.innerHTML = `
+                        <img src="${photoData.url}" alt="Foto Carrossel" style="width: 80px; height: 80px; object-fit: cover; margin-right: 10px;">
+                        <span>${photoData.path.split('/').pop()}</span> <!-- Mostra apenas o nome do arquivo -->
+                        <button class="delete-photo-button" data-photoid="${photoId}" data-photopath="${photoData.path}" style="margin-left: auto; background-color: #f44336;">Excluir</button>
+                    `;
+                    currentCarouselPhotosDiv.appendChild(photoItemDiv);
+                });
+
+                // Adiciona event listeners para os botões de exclusão (após criá-los)
+                currentCarouselPhotosDiv.querySelectorAll(".delete-photo-button").forEach(button => {
+                    button.addEventListener("click", async (e) => {
+                        if (confirm("Tem certeza que deseja excluir esta foto do carrossel?")) {
+                            const photoIdToDelete = e.target.dataset.photoid;
+                            const photoPathToDelete = e.target.dataset.photopath;
+
+                            try {
+                                // 1. Excluir do Cloud Storage
+                                const fileRef = ref(storage, photoPathToDelete);
+                                await deleteObject(fileRef);
+                                console.log("Foto excluída do Storage!");
+
+                                // 2. Excluir do Firestore
+                                await deleteDoc(firestoreDoc(db, "carouselImages", photoIdToDelete));
+                                console.log("Referência da foto excluída do Firestore!");
+
+                                alert("Foto excluída com sucesso!");
+                                // onSnapshot cuidará da atualização da lista visual automaticamente
+                            } catch (error) {
+                                console.error("Erro ao excluir foto:", error);
+                                alert("Erro ao excluir foto: " + error.message);
+                            }
+                        }
+                    });
+                });
+            });
+        }
+        // === Fim da Lógica para Gerenciar Fotos do Carrossel (Admin - Upload e Exclusão) ===
+
+
+        // === Lógica para Exibir Músicas como Dropdown ===
+        const musicDropdownTrigger = document.getElementById("music-dropdown-trigger");
+        const musicDropdownContent = document.getElementById("music-dropdown-content");
+        const musicListUl = document.getElementById("music-list-ul");
+        const selectedMusicDetailsDiv = document.getElementById("selected-music-details");
+        const musicDropdownContainer = document.getElementById("music-dropdown-container"); // Adicionado para fechar dropdown
+
+        // Armazena todas as músicas para acesso rápido sem precisar re-consultar o Firestore
+        let allMusicData = {};
+
+        if (musicDropdownTrigger && musicDropdownContent && musicListUl && selectedMusicDetailsDiv && musicDropdownContainer) { // Adicionado musicDropdownContainer na verificação
+            // Alterna a visibilidade do dropdown ao clicar no trigger
+            musicDropdownTrigger.addEventListener("click", () => {
+                musicDropdownContent.style.display = (musicDropdownContent.style.display === "block") ? "none" : "block";
+            });
+
+            // Fecha o dropdown se clicar fora dele
+            window.addEventListener("click", (e) => {
+                // Verifica se o clique não foi dentro do container do dropdown
+                if (!musicDropdownContainer.contains(e.target)) {
+                    musicDropdownContent.style.display = "none";
+                }
+            });
+
+            // Cria uma consulta (query) para a coleção 'musicas', ordenada por título
+            const q = query(collection(db, "musicas"), orderBy("titulo", "asc"));
+
+            // Escuta por mudanças em tempo real na coleção 'musicas'
+            onSnapshot(q, (querySnapshot) => {
+                musicListUl.innerHTML = ""; // Limpa a lista antes de adicionar os itens atualizados
+                allMusicData = {}; // Limpa os dados armazenados
+
+                if (querySnapshot.empty) {
+                    musicListUl.innerHTML = "<li>Nenhuma música encontrada.</li>";
+                    selectedMusicDetailsDiv.innerHTML = "<p>Nenhuma música encontrada.</p>";
+                    musicDropdownTrigger.textContent = "Nenhuma Música";
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const music = doc.data();
+                    const musicId = doc.id;
+                    allMusicData[musicId] = music; // Armazena a música completa pelo seu ID
+
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${music.titulo} - ${music.autor || 'Desconhecido'}`;
+                    listItem.dataset.musicId = musicId; // Armazena o ID do documento no elemento HTML
+
+                    // Adiciona um evento de clique para mostrar os detalhes da música
+                    listItem.addEventListener("click", () => {
+                        const selectedId = listItem.dataset.musicId;
+                        const selectedMusic = allMusicData[selectedId];
+                        
+                        if (selectedMusic) {
+                            // Atualiza o texto do trigger com a música selecionada
+                            musicDropdownTrigger.textContent = `${selectedMusic.titulo} - ${selectedMusic.autor || 'Desconhecido'}`;
+                            
+                            // Gera o HTML para os detalhes da música
+                            let videoLinksHtml = '';
+                            if (selectedMusic.linksVideos && selectedMusic.linksVideos.length > 0) {
+                                videoLinksHtml += '<p><strong>Vídeos Relacionados:</strong></p><ul>';
+                                selectedMusic.linksVideos.forEach(link => {
+                                    videoLinksHtml += `<li><a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a></li>`;
+                                });
+                                videoLinksHtml += '</ul>';
+                            }
+
+                            selectedMusicDetailsDiv.innerHTML = `
+                                <h3>${selectedMusic.titulo}</h3>
+                                <p><strong>Autor/Compositor:</strong> ${selectedMusic.autor || 'Desconhecido'}</p>
+                                <pre>${selectedMusic.letra}</pre>
+                                ${videoLinksHtml}
+                            `;
+                            musicDropdownContent.style.display = "none"; // Fecha o dropdown
+                        }
+                    });
+                    musicListUl.appendChild(listItem);
+                });
+
+                // Se houver músicas, selecione a primeira por padrão (ou mantenha a selecionada)
+                if (querySnapshot.docs.length > 0) {
+                    const firstMusicId = querySnapshot.docs[0].id;
+                    const firstMusic = allMusicData[firstMusicId];
+                    const currentSelectedId = musicDropdownTrigger.dataset.selectedMusicId;
+
+                    // Se não há música selecionada ou a selecionada não existe mais, selecione a primeira
+                    if (firstMusic && (!currentSelectedId || !allMusicData[currentSelectedId])) {
+                        musicDropdownTrigger.textContent = `${firstMusic.titulo} - ${firstMusic.autor || 'Desconhecido'}`;
+                        musicDropdownTrigger.dataset.selectedMusicId = firstMusicId; // Guarda qual música está selecionada no trigger
+
+                        let videoLinksHtml = '';
+                        if (firstMusic.linksVideos && firstMusic.linksVideos.length > 0) {
+                            videoLinksHtml += '<p><strong>Vídeos Relacionados:</strong></p><ul>';
+                            firstMusic.linksVideos.forEach(link => {
+                                videoLinksHtml += `<li><a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a></li>`;
+                            });
+                            videoLinksHtml += '</ul>';
+                        }
+                        selectedMusicDetailsDiv.innerHTML = `
+                            <h3>${firstMusic.titulo}</h3>
+                            <p><strong>Autor/Compositor:</strong> ${firstMusic.autor || 'Desconhecido'}</p>
+                            <pre>${firstMusic.letra}</pre>
+                            ${videoLinksHtml}
+                        `;
+                    } else if (currentSelectedId && allMusicData[currentSelectedId]) {
+                        // Se uma música já estava selecionada e ainda existe, apenas atualiza o trigger text caso tenha sido apagado
+                        const currentSelectedMusic = allMusicData[currentSelectedId];
+                        musicDropdownTrigger.textContent = `${currentSelectedMusic.titulo} - ${currentSelectedMusic.autor || 'Desconhecido'}`;
+                    } else if (currentSelectedId && !allMusicData[currentSelectedId] && querySnapshot.docs.length > 0) {
+                        // Se a música selecionada foi apagada e há outras músicas, selecione a primeira
+                         const newFirstMusicId = querySnapshot.docs[0].id;
+                         const newFirstMusic = allMusicData[newFirstMusicId];
+                         musicDropdownTrigger.textContent = `${newFirstMusic.titulo} - ${newFirstMusic.autor || 'Desconhecido'}`;
+                         musicDropdownTrigger.dataset.selectedMusicId = newFirstMusicId;
+
+                         let videoLinksHtml = '';
+                         if (newFirstMusic.linksVideos && newFirstMusic.linksVideos.length > 0) {
+                             newFirstMusic.linksVideos.forEach(link => {
+                                 videoLinksHtml += `<li><a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a></li>`;
+                             });
+                             videoLinksHtml += '</ul>';
+                         }
+                         selectedMusicDetailsDiv.innerHTML = `
+                             <h3>${newFirstMusic.titulo}</h3>
+                             <p><strong>Autor/Compositor:</strong> ${newFirstMusic.autor || 'Desconhecido'}</p>
+                             <pre>${newFirstMusic.letra}</pre>
+                             ${videoLinksHtml}
+                         `;
+                    }
+                } else { // Se não há músicas
+                    selectedMusicDetailsDiv.innerHTML = "<p>Nenhuma música encontrada.</p>";
+                    musicDropdownTrigger.textContent = "Nenhuma Música";
+                    delete musicDropdownTrigger.dataset.selectedMusicId; // Remove o ID selecionado
+                }
+
+
+            }, (error) => {
+                console.error("Erro ao carregar músicas:", error);
+                musicListUl.innerHTML = `<li style="color: red;">Erro ao carregar músicas: ${error.message}</li>`;
+                selectedMusicDetailsDiv.innerHTML = `<p style="color: red;">Erro ao carregar músicas: ${error.message}</p>`;
+            });
+        } else {
+            console.warn("Elementos HTML do dropdown de músicas não encontrados.");
+        }
+        // === Fim da Lógica para Exibir Músicas como Dropdown ===
+
+    </script>
+
+    <!-- Se você tiver outros arquivos JavaScript para sua lógica de app, pode importá-los aqui TAMBÉM como módulos -->
+    <!-- Por exemplo: <script type="module" src="seu-app-script.js"></script> -->
+
+</body>
+</html>

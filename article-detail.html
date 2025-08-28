@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detalhes do Artigo | Coral de Homens Guerreiros de Cristo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #article-content h2 {
+            color: #3f51b5;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        #article-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #article-content p {
+            font-size: 1.1em;
+            margin-bottom: 1em;
+        }
+        #article-content .loading-message, #article-content .error-message {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.2em;
+            color: #555;
+        }
+        #article-content .error-message {
+            color: red;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Detalhes do Artigo</h1>
+        <div id="article-content">
+            <p class="loading-message">Carregando artigo...</p>
+        </div>
+        <button class="back-button" onclick="history.back()">Voltar</button>
+    </main>
+
+    <!-- IMPORTANTE: A TAG SCRIPT DEVE TER type="module" -->
+    <script type="module">
+        // Sua configuração do app web do Firebase
+        // IMPORTANTE: Use EXATAMENTE a mesma firebaseConfig do seu index.html
+        const firebaseConfig = {
+          apiKey: "AIzaSyAywv9Aj6TXKFwCxbYpOnEY3Ymtf4o77ic",
+          authDomain: "coral-guerreiros.firebaseapp.com",
+          projectId: "coral-guerreiros",
+          storageBucket: "coral-guerreiros.firebasestorage.app",
+          messagingSenderId: "117520114132",
+          appId: "1:117520114132:web:71e40037c8261789ffb641",
+          measurementId: "G-2GH6LGCJ80"
+        };
+
+        // Importe as funções necessárias para os serviços do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        // Inicialize o Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const articleContentDiv = document.getElementById("article-content");
+
+        // Função para obter o ID do artigo da URL
+        function getArticleIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id'); // Obtém o valor do parâmetro 'id'
+        }
+
+        // Função para carregar e exibir o artigo
+        async function loadArticle() {
+            const articleId = getArticleIdFromUrl();
+
+            if (!articleId) {
+                articleContentDiv.innerHTML = '<p class="error-message">ID do artigo não encontrado na URL.</p>';
+                return;
+            }
+
+            try {
+                const articleRef = doc(db, "articles", articleId); // Referência ao documento do artigo
+                const articleSnap = await getDoc(articleRef); // Tenta obter o documento
+
+                if (articleSnap.exists()) {
+                    const articleData = articleSnap.data();
+
+                    let articleHtml = `<h2>${articleData.title}</h2>`;
+                    if (articleData.imageUrl) {
+                        articleHtml += `<img src="${articleData.imageUrl}" alt="${articleData.title}">`;
+                    }
+                    // Dividir o texto em parágrafos para melhor leitura
+                    articleData.text.split('\n').forEach(paragraph => {
+                        if (paragraph.trim() !== '') { // Ignora linhas em branco resultantes da quebra
+                            articleHtml += `<p>${paragraph}</p>`;
+                        }
+                    });
+
+                    articleContentDiv.innerHTML = articleHtml;
+                } else {
+                    articleContentDiv.innerHTML = '<p class="error-message">Artigo não encontrado.</p>';
+                }
+            } catch (error) {
+                console.error("Erro ao carregar o artigo:", error);
+                articleContentDiv.innerHTML = `<p class="error-message">Ocorreu um erro ao carregar o artigo: ${error.message}</p>`;
+            }
+        }
+
+        // Chama a função para carregar o artigo quando a página é carregada
+        loadArticle();
+    </script>
+</body>
+</html>

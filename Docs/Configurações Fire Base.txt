@@ -1,0 +1,116 @@
+NPM
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAywv9Aj6TXKFwCxbYpOnEY3Ymtf4o77ic",
+  authDomain: "coral-guerreiros.firebaseapp.com",
+  projectId: "coral-guerreiros",
+  storageBucket: "coral-guerreiros.firebasestorage.app",
+  messagingSenderId: "117520114132",
+  appId: "1:117520114132:web:71e40037c8261789ffb641",
+  measurementId: "G-2GH6LGCJ80"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+CDN
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAywv9Aj6TXKFwCxbYpOnEY3Ymtf4o77ic",
+    authDomain: "coral-guerreiros.firebaseapp.com",
+    projectId: "coral-guerreiros",
+    storageBucket: "coral-guerreiros.firebasestorage.app",
+    messagingSenderId: "117520114132",
+    appId: "1:117520114132:web:71e40037c8261789ffb641",
+    measurementId: "G-2GH6LGCJ80"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Coral de Homens Guerreiros de Cristo</title>
+</head>
+<body>
+    <h1>CORAL DE HOMENS GUERREIROS DE CRISTO</h1>
+
+    <!-- SEU CONTEÚDO HTML DO APP (carrossel, contador, menus, etc.) VIRÁ AQUI -->
+    <!-- Substitua a linha acima por algo como: -->
+
+    <div id="carousel-container">
+        <!-- HTML para seu carrossel de fotos aqui -->
+        <img src="foto1.jpg" alt="Foto do Grupo 1">
+        <img src="foto2.jpg" alt="Foto do Grupo 2">
+        <!-- Mais fotos -->
+    </div>
+
+    <div id="access-counter">
+        Contador de Acessos: <span id="counter-display">0</span>
+    </div>
+
+    <nav id="main-menu">
+        <ul>
+            <li><a href="#musicas">Músicas</a></li>
+            <li><a href="#artigos">Artigos</a></li>
+            <li><a href="#avisos">Avisos</a></li>
+            <li><a href="#admin">Área Admin</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="musicas">
+            <h2>Índice de Músicas</h2>
+            <!-- Campo de busca, menu suspenso de músicas aqui -->
+            <div id="music-list">
+                <!-- Músicas carregadas pelo JavaScript do Firestore -->
+            </div>
+        </section>
+
+        <section id="artigos">
+            <h2>Artigos e Links</h2>
+            <!-- Conteúdo de artigos aqui -->
+        </section>
+
+        <section id="avisos">
+            <h2>Avisos do Administrador</h2>
+            <!-- Conteúdo de avisos aqui -->
+        </section>
+
+        <section id="admin">
+            <h2>Área Administrativa</h2>
+            <!-- Formulário de login admin, formulários de adicionar/editar músicas/artigos -->
+        </section>
+    </main>
+
+    <!-- O SCRIPT DO FIREBASE FICA ABAIXO DO SEU CONTEÚDO HTML -->
+    <script type="module">
+        // ... (todo o código do Firebase que já te passei) ...
+    </script>
+
+</body>
+</html>
+

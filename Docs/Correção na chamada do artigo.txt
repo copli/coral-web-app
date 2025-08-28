@@ -1,0 +1,19 @@
+Quando clico no artigo, aparece a seguinte mensagem: Você clicou no artigo: Retiro de Homens. Aqui abriria a página de detalhes! Mas não abre o artigo
+
+
+
+troque este trecho na linha 622
+
+
+                            articleSlide.addEventListener('click', () => {
+                                alert(`Você clicou no artigo: ${itemData.title}. Aqui abriria a página de detalhes!`);
+                                // Futuramente: window.location.href = `artigo.html?id=${docSnap.id}`; ou abrir modal
+                            });
+
+
+por este trecho
+
+                            articleSlide.addEventListener('click', () => {
+                                // Redireciona para a página de detalhes, passando o ID do artigo na URL
+                                window.location.href = `article-detail.html?id=${docSnap.id}`;
+                            });

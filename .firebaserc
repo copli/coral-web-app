@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "coral-guerreiros",
+    "coral": "coral-guerreiros"
+  },
+  "targets": {},
+  "etags": {}
+}
