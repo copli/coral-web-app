@@ -14,13 +14,16 @@ service cloud.firestore {
     }
 
     // Regra para o contador de acessos
-    match /appInfo/acessos {
-      allow read: if true;
-      allow update: if request.auth != null &&
-                       request.resource.data.keys().hasOnly(['count']) &&
-                       request.resource.data.count is number;
-      allow create, delete: if false;
-    }
+      match /appInfo/acessos {
+        allow read: if true;
+        // Permite a criação do documento apenas se o contador começar em 1.
+        allow create: if request.resource.data.keys().hasOnly(['count']) &&
+                         request.resource.data.count == 1;
+        // Permite a atualização apenas se o contador for incrementado em exatamente 1.
+        allow update: if request.resource.data.keys().hasOnly(['count']) &&
+                         request.resource.data.count == resource.data.count + 1;
+        allow delete: if false;
+      }
 
     // Regras para coleções de conteúdo gerenciadas por administradores
     match /musicas/{musicId} {

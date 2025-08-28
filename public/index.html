@@ -497,6 +497,10 @@
     // getFirestore, doc, getDoc, updateDoc, setDoc, increment, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc as firestoreDoc
     // ADICIONADO 'limit' AQUI!
     import { getFirestore, doc, getDoc, updateDoc, setDoc, increment, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc as firestoreDoc, limit } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    // Importações para Auth (ESTAVAM FALTANDO)
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    // Importações para Storage (ESTAVAM FALTANDO)
+    import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
     // Inicialize o Firebase
     const app = initializeApp(firebaseConfig);
